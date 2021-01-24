@@ -11,15 +11,9 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QApplication, QTe
 
 
 import sounddevice as sd 
-from scipy.io.wavfile import write 
-import wavio as wv 
+
 import speech_recognition as sr
 
-import io
-from PIL import Image
-import pytesseract
-from wand.image import Image as wi
-import pandas as pd
 
 ## Pour l'inco dans le TaskBar en bas
 import ctypes
@@ -42,9 +36,6 @@ class Menu(QMainWindow):
         self.widget = QWidget(self)
 
         self.setWindowTitle("Voice recognition")
-
-        #scriptDir = os.path.dirname(os.path.realpath(__file__))
-        #self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'logo.png'))
         self.setWindowIcon(QIcon("img" + os.path.sep  + '001-microphone.png')) 
 
         self.central_widget = QWidget()               
@@ -73,8 +64,6 @@ class Menu(QMainWindow):
         saveFile.triggered.connect(self.Save_text)
 
         self.show()
-
-
 
     def createHorizontalLayout(self):
         self.horizontalGroupBox = QGroupBox()
@@ -113,7 +102,6 @@ class Menu(QMainWindow):
     def show_text(self): 
         r = sr.Recognizer()
         print("show text ...")
-        print("filename = ",self.filename)
         if(self.filename == False):
             file = sr.AudioFile('recording1.wav')
         else:
@@ -122,7 +110,6 @@ class Menu(QMainWindow):
             r.adjust_for_ambient_noise(source)
             audio = r.record(source)
             result = r.recognize_google(audio,language='en')
-            #print(result)
         self.edit.clear()
         self.edit.append(result)
 
@@ -153,7 +140,6 @@ class Menu(QMainWindow):
         except:
             print("##No audio file opened")
         if fileName:
-            print(fileName.split('/')[-1])
             self.filename = fileName.split('/')[-1]
             QtMultimedia.QSound.play(self.filename)
             self.show_text()
